@@ -1,4 +1,4 @@
-const {Contact} = require("../../models/contactModel")
+const { Contact } = require("../../models/contactModel")
 const { HttpError } = require("../../helpers/HttpErrors")
 
 

@@ -1,6 +1,6 @@
 const messages = {
     400: "Bad request",
-    401: "Unauthorizied" 
+    401: "Unauthorized"
 }
 
 function HttpError(status, message = messages[status]) {

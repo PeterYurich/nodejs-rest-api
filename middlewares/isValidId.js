@@ -1,17 +1,15 @@
 const { isValidObjectId } = require("mongoose")
 
-// const { HttpError } = require("../helpers/HttpErrors")
+const { HttpError } = require("../helpers/HttpErrors")
 
 const isValidId = (req, res, next) => {
-    const { id } = req.params
+    const { contactId } = req.params
 
-console.log(isValidObjectId(id)) // "false" is always. why?
-    
-    // if (!isValidObjectId(id)) {
-    //     next(HttpError(404, "Invalid id"))
-    // }
+    if (!isValidObjectId(contactId)) {
+        next(HttpError(404, "Invalid id"))
+    }
     next()
-    
+
 }
 
 module.exports = { isValidId }
