@@ -1,9 +1,10 @@
-const {Contacts} = require("../../models/contactModel")
+const { Contacts } = require("../../models/contactModel")
 
 const getAll = async (req, res, next) => {
-
-  const result = await Contacts.find()
-
+ 
+  const {_id: owner} = req.user
+  const result = await Contacts.find({owner})
+  
   res.json(result)
 }
 

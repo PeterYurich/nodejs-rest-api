@@ -6,20 +6,22 @@ const router = express.Router()
 
 const { ctrlWrapper } = require('../../helpers')
 
-const { schemas } = require('../../models/contactModel')
-const { validateBody, isValidId } = require('../../middlewares')
+const { validateBody, isValidId, authenticate } = require('../../middlewares')
 
-router.get('/', ctrlWrapper(ctrl.getAll))
-router.get('/:contactId', ctrlWrapper(ctrl.getById))
-router.post('/', validateBody(schemas.addContactSchema),
+const { schemas } = require('../../models/contactModel')
+
+
+router.get('/', authenticate, ctrlWrapper(ctrl.getAll))
+router.get('/:contactId', authenticate, isValidId, ctrlWrapper(ctrl.getById))
+router.post('/', authenticate, validateBody(schemas.addContactSchema),
     ctrlWrapper(ctrl.add))
-router.put('/:contactId', isValidId,
+router.put('/:contactId', authenticate, isValidId,
     validateBody(schemas.addContactSchema),
     ctrlWrapper(ctrl.updateById))
-router.delete('/:contactId',
-    ctrlWrapper(ctrl.deleteById))
-router.patch('/:contactId/favorite',
+router.patch('/:contactId/favorite', authenticate,
     validateBody(schemas.updateFieldFavoriteSchema),
     ctrlWrapper(ctrl.updateFavorite))
+router.delete('/:contactId', authenticate,
+    ctrlWrapper(ctrl.deleteById))
 
 module.exports = router
