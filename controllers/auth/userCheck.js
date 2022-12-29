@@ -1,6 +1,7 @@
 const userCheck = async (req, res, next) => {
 
-    res.status(201).json({ asdf: 'asdf' })
+    const { email, subscription } = req.user
+    res.status(201).json({ email, subscription })
 }
 
 module.exports = { userCheck }

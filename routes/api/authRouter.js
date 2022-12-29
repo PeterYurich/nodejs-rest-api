@@ -4,13 +4,12 @@ const router = express.Router()
 
 const { ctrlWrapper } = require('../../helpers')
 
-const { validateBody } = require('../../middlewares')
+const { validateBody, authenticate } = require('../../middlewares')
 
 const { schemas } = require('../../models/userModel')
 
 const ctrl = require('../../controllers/auth')
 
-const { authenticate } = require('../../middlewares')
 
 router.post('/register', validateBody(schemas.registerSchema),
     ctrlWrapper(ctrl.register))
