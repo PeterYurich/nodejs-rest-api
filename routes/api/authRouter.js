@@ -17,7 +17,7 @@ router.post('/register', validateBody(schemas.registerSchema),
 router.post('/login', validateBody(schemas.loginSchema),
     ctrlWrapper(ctrl.login))
 
-router.patch('/logout', ctrlWrapper(ctrl.logout))
+router.patch('/logout', authenticate, ctrlWrapper(ctrl.logout))
 
 router.get('/current', authenticate, ctrl.userCheck)
 
