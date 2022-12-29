@@ -4,7 +4,7 @@ const { SECRET_KEY } = process.env
 const { User } = require("../models/userModel")
 
 const authenticate = async (req, res, next) => {
-    const { authorization } = req.headers
+    const { authorization = "" } = req.headers
     const [bearer, token] = authorization.split(" ")
 
     if (bearer !== "Bearer") {
@@ -14,16 +14,17 @@ const authenticate = async (req, res, next) => {
     try {
         const { id } = jwt.verify(token, SECRET_KEY)
         const user = await User.findById(id)
-        if (!user) {
+console.log(id)
+        if (!user || !user.token ) {
             next(HttpError(401))
         }
 
         req.user = user
         next()
     } catch {
+        console.log('asdf')
         next(HttpError(401))
     }
- 
 }
 
 module.exports = { authenticate }

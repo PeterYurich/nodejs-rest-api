@@ -23,5 +23,5 @@ router.patch('/:contactId/favorite', authenticate,
     ctrlWrapper(ctrl.updateFavorite))
 router.delete('/:contactId', authenticate,
     ctrlWrapper(ctrl.deleteById))
-router.get('/')
+
 module.exports = router
