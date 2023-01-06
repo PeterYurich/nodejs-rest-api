@@ -7,11 +7,9 @@ const { User } = require("../../models");
 const avatarDir = path.join(__dirname, '../../', "public", "avatars");
 
 const updateAvatar = async (req, res) => {
-
     const { path: tempUpload, originalname } = req.file;
 
     const avatar = await Jimp.read(tempUpload)
-
     avatar.resize(250, 250)
 
     const { _id } = req.user
