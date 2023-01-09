@@ -8,26 +8,29 @@ mongoose.set('strictQuery', false)
 
 const app = require('../../app')
 
-const { DB_TEST_HOST, PORT, DB_HOST } = process.env
+const { DB_TEST_HOST, PORT } = process.env
 
 describe("test auth", () => {
     let server
     let _id = null
     let logedUser = null
 
-    beforeAll(() => server = app.listen(PORT))
+    beforeAll(() => {
+        server = app.listen(PORT)
+        mongoose.connect(DB_TEST_HOST);
+    })
 
     afterAll(async () => {
         // await User.findByIdAndDelete(_id);
         mongoose.disconnect();
-
         server.close()
     }
     )
 
-    beforeEach(async () => {
-        mongoose.connect(DB_HOST);
-    });
+    // beforeEach(async () => {
+    //     mongoose.connect(DB_HOST);
+    // });
+
     // afterEach(async () => {
     //     mongoose.disconnect();
     // });
