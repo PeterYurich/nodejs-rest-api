@@ -2,56 +2,75 @@ const mongoose = require('mongoose')
 const request = require('supertest') // пакет, що може робити запит
 require("dotenv").config
 
-mongoose.set('strictQuery', false)
-
 const { User } = require('../../models')
+
+mongoose.set('strictQuery', false)
 
 const app = require('../../app')
 
-const { DB_TEST_HOST, PORT } = process.env
+const { DB_TEST_HOST, PORT, DB_HOST } = process.env
 
-describe("test register", () => {
+describe("test auth", () => {
     let server
-    beforeAll(() => server = app.listen(PORT)) //what's happening?
+    let _id = null
+    let logedUser = null
 
-    afterAll(() => server.close())
+    beforeAll(() => server = app.listen(PORT))
+
+    afterAll(async () => {
+        // await User.findByIdAndDelete(_id);
+        mongoose.disconnect();
+
+        server.close()
+    }
+    )
 
     beforeEach(async () => {
-        mongoose.connect(process.env.DB_HOST);
+        mongoose.connect(DB_HOST);
     });
-    afterEach(async () => {
-        mongoose.disconnect();
-    });
+    // afterEach(async () => {
+    //     mongoose.disconnect();
+    // });
 
-    /*
-    oтвет должен иметь статус-код 200
-    в ответе должен возвращаться токен
-    в ответе должен возвращаться объект user с 2 полями email и subscription, имеющие тип данных String
-    */
-
-    test("test status-code", async () => {
+    test("status-register is correct", async () => {
         const newUser = {
             name: "TestName",
             email: "test@gmail.com",
             password: "321321",
         };
 
-        const user = await User.create(newUser);
+        const resRegister = await request(app).post("/api/users/register").send(newUser)
 
-        const userToLogIn = {
+        expect(resRegister.statusCode).toBe(200)
+    })
+
+    test("status-login is correct", async () => {
+
+        const userToLogin = {
             email: "test@gmail.com",
             password: "321321",
         }
 
-        // await request(app).post("/api/users/register").send(newUser)
-        const response = await request(app).post("/api/users/login").send(userToLogIn)
+        logedUser = await request(app).post("/api/users/login").send(userToLogin)
 
+        expect(logedUser.statusCode).toBe(200)
+    })
+
+    test("token returns", async () => {
+        expect(logedUser.body.token).toBeTruthy()
+    })
+
+    test("expected login-response returns ", async () => {
         const resUser = {
             email: "test@gmail.com",
             subscription: "starter",
         }
-        expect(response.statusCode).toBe(200)
-        expect(response.body.token).toByTruthy()
-        expect(response.body.user).toBe(resUser)
+
+        expect(logedUser.body.user).toStrictEqual(resUser)
+
+        const user = await User.findOne({ email: "test@gmail.com" })
+        _id = user._id
+
+        await User.findByIdAndDelete(_id);
     })
 })
