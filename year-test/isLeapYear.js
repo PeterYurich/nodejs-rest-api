@@ -1,5 +1,3 @@
-// const lib = require("")
-
 const isLeapYear = (year) => {
     if (year === undefined) { throw new Error('year must exist') }
     if (typeof year !== 'number') { throw new Error('year must be number')} 
@@ -12,4 +10,5 @@ const isLeapYear = (year) => {
     return (days === 29)
 }
 
+module.exports = isLeapYear
 module.exports = isLeapYear
