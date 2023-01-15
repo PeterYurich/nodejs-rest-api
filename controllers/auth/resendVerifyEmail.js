@@ -5,8 +5,13 @@ const { HttpError, sendEmail } = require('../../helpers')
 const resendVerifyEmail = async (req, res) => {
     const { email } = req.body
     const user = await User.findOne({ email })
-    if (!user || user.verify) {
+    if (!user) {
         throw HttpError(404)
+    }
+
+    if (user.verify) {
+        res.json({ message: "Verification has already been passed"})
+        throw HttpError(400, "Verification has already been passed")
     }
 
     const verifyEmail = {
