@@ -13,6 +13,7 @@ const updateAvatar = async (req, res) => {
     avatar.resize(250, 250)
 
     const { _id } = req.user
+console.log("avaID", _id)
     const fileName = `${_id}_${originalname}`
     const resultUpload = path.join(avatarDir, fileName);
     await fs.rename(tempUpload, resultUpload)
