@@ -6,6 +6,9 @@ const { handleMongooseError } = require('../helpers');
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 const userSchema = new Schema({
+    name: {
+        type: String,
+    },
     password: {
         type: String,
         required: [true, 'Password is required'],
@@ -18,7 +21,17 @@ const userSchema = new Schema({
     subscription: {
         type: String,
         enum: ["starter", "pro", "business"],
-        default: "starter"
+        default: "starter",
+    },
+    avatarURL: {
+        type: String,
+    },
+    verify: {
+        type: Boolean,
+        default: false
+    },
+    verificationCode: {
+        type: String,
     },
     token: {
         type: String,
@@ -30,6 +43,7 @@ const userSchema = new Schema({
 userSchema.post("save", handleMongooseError) //if smth is not unique
 
 const registerSchema = Joi.object({
+    name: Joi.string(),
     password: Joi.string().min(6).required(),
     email: Joi.string().pattern(emailRegexp).required(),
 })
@@ -40,9 +54,14 @@ const loginSchema = Joi.object({
     subscription: Joi.string(),
 })
 
+const emailSchema = Joi.object({
+    email: Joi.string().required()
+})
+
 const schemas = {
     registerSchema,
     loginSchema,
+    emailSchema
 }
 
 const User = model("user", userSchema)
