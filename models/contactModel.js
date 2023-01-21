@@ -5,9 +5,9 @@ const { handleMongooseError } = require('../helpers')
 
 const addContactSchema = Joi.object({
     name: Joi.string().required(),
-    email: Joi.string().email().required(),
     phone: Joi.string().required(),
-    favorite: Joi.boolean().required()
+    // email: Joi.string().email(),
+    // favorite: Joi.boolean(),
 })
 
 const updateFieldFavoriteSchema = Joi.object({
@@ -21,17 +21,17 @@ const contactSchema = new Schema({
         unique: true,
         required: [true, 'Set name for contact'],
     },
-    email: {
-        type: String,
-        unique: true,
-    },
     phone: {
         type: String,
     },
-    favorite: {
-        type: Boolean,
-        default: false,
-    },
+    // email: {
+    //     type: String,
+    //     unique: true,
+    // },
+    // favorite: {
+    //     type: Boolean,
+    //     default: false,
+    // },
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'user',

@@ -6,7 +6,7 @@ const { User } = require("../models/userModel")
 const authenticate = async (req, res, next) => {
     const { authorization = "" } = req.headers
     const [bearer, token] = authorization.split(" ")
-
+    
     if (bearer !== "Bearer") {
         next(HttpError(401))
     }
