@@ -4,6 +4,8 @@ const { HttpError } = require("../../helpers")
 const deleteById = async (req, res, next) => {
 
     const { contactId } = req.params
+    
+    if (contactId === "undefined") { throw HttpError(404, "Not found") }
     const result = await Contact.findByIdAndRemove(
         { _id: contactId })
     if (!result) {

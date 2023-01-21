@@ -12,7 +12,7 @@ const getAll = async (req, res, next) => {
   //   query.favorite = favorite
   // }
 
-  query.favorite = favorite ? favorite : { $in: [true, false] } 
+  query.favorite = favorite || { $in: [true, false] } 
   // $in: [1, 2, ...] - один из массива. Это такой сложный запрос от Мангуса
 
   const result = await Contact.find(query, "-createdAt -updatedAt", { skip, limit })
