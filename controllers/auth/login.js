@@ -17,6 +17,10 @@ const login = async (req, res) => {
         throw HttpError(401, "Email or password invalid")
     }
 
+    if (!user.verify) {
+        throw HttpError(401, "Email not verified")
+    }
+
     const payload = {
         id: user._id,
     }
@@ -25,11 +29,12 @@ const login = async (req, res) => {
 
     user.token = token
 
-    const logedInUser = await User.findByIdAndUpdate({ _id: user._id },user)
+    const logedInUser = await User.findByIdAndUpdate({ _id: user._id }, user)
 
-    res.json({
+    res.status(200).json({
         token,
         user: {
+            name: logedInUser.name,
             email: logedInUser.email,
             subscription: logedInUser.subscription,
         }

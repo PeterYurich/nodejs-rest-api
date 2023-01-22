@@ -5,6 +5,7 @@ const logout = async (req, res, next) => {
 
     const { _id } = req.user
     try {
+        console.log("_id", _id)
         await User.findByIdAndUpdate(
             { _id }, { token: null }, { new: true })
     }
