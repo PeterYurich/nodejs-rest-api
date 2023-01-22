@@ -15,6 +15,11 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.get('/check', (req, res) => {
+  res.json({
+    "message": "api works"
+  })
+})
 app.use('/api/user', authRouter)
 app.use('/api/contacts', contactsRouter)
 
